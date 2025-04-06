@@ -8,7 +8,7 @@
 #include  <Protocol/BlockIo.h>
 
 // input output
-//入力は関数実行前にいれる　出力は関数実行後に入る　ポインタ操作
+//入力は関数実行前にいれる 　出力は関数実行後に入る　ポインタ操作
 
 // #@@range_begin(struct_memory_map)
 struct MemoryMap {
