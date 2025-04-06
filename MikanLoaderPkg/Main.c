@@ -7,6 +7,8 @@
 #include  <Protocol/DiskIo2.h>
 #include  <Protocol/BlockIo.h>
 
+// input output
+
 // #@@range_begin(struct_memory_map)
 struct MemoryMap {
   UINTN buffer_size;
