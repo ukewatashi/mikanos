@@ -8,6 +8,8 @@
 #include  <Protocol/BlockIo.h>
 #include  <Guid/FileInfo.h>
 
+// メモリマップ
+
 struct MemoryMap {
   UINTN buffer_size;
   VOID* buffer;
@@ -108,6 +110,7 @@ EFI_STATUS OpenRootDir(EFI_HANDLE image_handle, EFI_FILE_PROTOCOL** root) {
   return EFI_SUCCESS;
 }
 
+//　カーネルファイル読み込み
 EFI_STATUS EFIAPI UefiMain(
     EFI_HANDLE image_handle,
     EFI_SYSTEM_TABLE* system_table) {
@@ -129,6 +132,7 @@ EFI_STATUS EFIAPI UefiMain(
   memmap_file->Close(memmap_file);
 
   // #@@range_begin(read_kernel)
+  //　カーネルファイル読み込み
   EFI_FILE_PROTOCOL* kernel_file;
   root_dir->Open(
       root_dir, &kernel_file, L"\\kernel.elf",
@@ -136,6 +140,8 @@ EFI_STATUS EFIAPI UefiMain(
 
   UINTN file_info_size = sizeof(EFI_FILE_INFO) + sizeof(CHAR16) * 12;
   UINT8 file_info_buffer[file_info_size];
+  
+  //　ファイル情報読み込み
   kernel_file->GetInfo(
       kernel_file, &gEfiFileInfoGuid,
       &file_info_size, file_info_buffer);
@@ -169,6 +175,8 @@ EFI_STATUS EFIAPI UefiMain(
   // #@@range_end(exit_bs)
 
   // #@@range_begin(call_kernel)
+  //  Entry point address:               0x101000
+  // 仕様よりここよりも２４下げる
   UINT64 entry_addr = *(UINT64*)(kernel_base_addr + 24);
 
   typedef void EntryPointType(void);
