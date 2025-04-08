@@ -186,7 +186,12 @@ EFI_STATUS EFIAPI UefiMain(
 
   UINT8* frame_buffer = (UINT8*)gop->Mode->FrameBufferBase;
   for (UINTN i = 0; i < gop->Mode->FrameBufferSize; ++i) {
-    frame_buffer[i] = 255;
+    if (i < gop->Mode->FrameBufferSize / 2) {
+      frame_buffer[i] = 230;
+    }
+    else {
+      frame_buffer[i] = 030;
+    }
   }
   // #@@range_end(gop)
 
