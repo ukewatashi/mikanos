@@ -230,7 +230,9 @@ EFI_STATUS EFIAPI UefiMain(
 
   // #@@range_begin(call_kernel)
   typedef void EntryPointType(UINT64, UINT64);
+  // カーネルのKernelMain関数が入るアドレスを渡す
   EntryPointType* entry_point = (EntryPointType*)entry_addr;
+  //　関数を実行　つまりこれはKernelMainを呼び出している
   entry_point(gop->Mode->FrameBufferBase, gop->Mode->FrameBufferSize);
   // #@@range_end(call_kernel)
 
