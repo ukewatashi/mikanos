@@ -21,7 +21,7 @@ struct PixelColor {
 //  指定したｘｙにｃを書く
 int WritePixel(const FrameBufferConfig& config,
                int x, int y, const PixelColor& c) {
-　//　座標を連続の値に変換　はじからのアドレス　左上が００
+//　座標を連続の値に変換　はじからのアドレス　左上が００
   const int pixel_position = config.pixels_per_scan_line * y + x;
   //　フォーマット判定無駄らしい
   if (config.pixel_format == kPixelRGBResv8BitPerColor) {
