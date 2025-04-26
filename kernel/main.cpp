@@ -14,12 +14,16 @@ struct PixelColor {
 };
 
 // #@@range_begin(pixel_writer)
+
 class PixelWriter {
  public:
+ //　コンストラクタ関数
   PixelWriter(const FrameBufferConfig& config) : config_{config} {
   }
+  // デストラクタ関数
   virtual ~PixelWriter() = default;
-  virtual void Write(int x, int y, const PixelColor& c) = 0;
+  // 純粋仮想関数
+  //virtual void Write(int x, int y, const PixelColor& c) = 0;
 
  protected:
   uint8_t* PixelAt(int x, int y) {
@@ -27,6 +31,7 @@ class PixelWriter {
   }
 
  private:
+ // メンバ変数
   const FrameBufferConfig& config_;
 };
 // #@@range_end(pixel_writer)
@@ -34,9 +39,10 @@ class PixelWriter {
 // #@@range_begin(derived_pixel_writer)
 class RGBResv8BitPerColorPixelWriter : public PixelWriter {
  public:
+ //　継承
   using PixelWriter::PixelWriter;
-
-  virtual void Write(int x, int y, const PixelColor& c) override {
+//　オーバーライド
+  virtual void Write(int x, int y, const PixelColor& c) {
     auto p = PixelAt(x, y);
     p[0] = c.r;
     p[1] = c.g;
@@ -48,7 +54,7 @@ class BGRResv8BitPerColorPixelWriter : public PixelWriter {
  public:
   using PixelWriter::PixelWriter;
 
-  virtual void Write(int x, int y, const PixelColor& c) override {
+  virtual void Write(int x, int y, const PixelColor& c)  {
     auto p = PixelAt(x, y);
     p[0] = c.b;
     p[1] = c.g;
@@ -73,23 +79,27 @@ PixelWriter* pixel_writer;
 extern "C" void KernelMain(const FrameBufferConfig& frame_buffer_config) {
   switch (frame_buffer_config.pixel_format) {
     case kPixelRGBResv8BitPerColor:
-      pixel_writer = new(pixel_writer_buf)
+    //　配置new　情報渡す instance
+      pixel_writer = new(pixel_writer_buf) 
         RGBResv8BitPerColorPixelWriter{frame_buffer_config};
       break;
     case kPixelBGRResv8BitPerColor:
-      pixel_writer = new(pixel_writer_buf)
-        BGRResv8BitPerColorPixelWriter{frame_buffer_config};
+      pixel_writer = new
+                      (pixel_writer_buf)
+                       BGRResv8BitPerColorPixelWriter{frame_buffer_config};
       break;
   }
 
   for (int x = 0; x < frame_buffer_config.horizontal_resolution; ++x) {
     for (int y = 0; y < frame_buffer_config.vertical_resolution; ++y) {
-      pixel_writer->Write(x, y, {255, 255, 255});
+      (new(pixel_writer_buf) 
+        RGBResv8BitPerColorPixelWriter{frame_buffer_config})->Write(x, y, {255, 255, 255});
     }
   }
   for (int x = 0; x < 200; ++x) {
     for (int y = 0; y < 100; ++y) {
-      pixel_writer->Write(x, y, {0, 255, 0});
+      (new(pixel_writer_buf) 
+        RGBResv8BitPerColorPixelWriter{frame_buffer_config})->Write(x, y, {0, 255, 0});
     }
   }
   while (1) __asm__("hlt");
