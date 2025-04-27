@@ -46,7 +46,7 @@ extern "C" void KernelMain(const FrameBufferConfig& frame_buffer_config) {
   Console console{*pixel_writer, {0, 0, 0}, {255, 255, 255}};
 
   char buf[128];
-  for (int i = 0; i < 27; ++i) {
+  for (int i = 0; i < 207; ++i) {
     sprintf(buf, "line %d\n", i);
     console.PutString(buf);
   }

@@ -24,6 +24,7 @@ void Console::PutString(const char* s) {
       Newline();
     } else if (cursor_column_ < kColumns - 1) {
       WriteAscii(writer_, 8 * cursor_column_, 16 * cursor_row_, *s, fg_color_);
+      //　スクロールのために保存しておく
       buffer_[cursor_row_][cursor_column_] = *s;
       ++cursor_column_;
     }
@@ -35,15 +36,20 @@ void Console::PutString(const char* s) {
 // #@@range_begin(newline)
 void Console::Newline() {
   cursor_column_ = 0;
+  //　まだ下に余裕あり
   if (cursor_row_ < kRows - 1) {
     ++cursor_row_;
+  //　余裕なし
   } else {
     for (int y = 0; y < 16 * kRows; ++y) {
       for (int x = 0; x < 8 * kColumns; ++x) {
+        //　背景でまず埋めつくす
         writer_.Write(x, y, bg_color_);
       }
     }
+    
     for (int row = 0; row < kRows - 1; ++row) {
+      //　１行あげて　つまりrowへらして描く
       memcpy(buffer_[row], buffer_[row + 1], kColumns + 1);
       WriteString(writer_, 0, 16 * row, buffer_[row], fg_color_);
     }
