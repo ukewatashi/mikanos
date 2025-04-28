@@ -32,6 +32,8 @@ namespace pci {
   uint16_t ReadDeviceId(uint8_t bus, uint8_t device, uint8_t function);
   /** @brief ヘッダタイプレジスタを読み取る（全ヘッダタイプ共通） */
   uint8_t ReadHeaderType(uint8_t bus, uint8_t device, uint8_t function);
+  uint16_t ReadSubsys(uint8_t bus, uint8_t device, uint8_t function);
+  uint32_t Read0(uint8_t bus, uint8_t device, uint8_t function);
   /** @brief クラスコードレジスタを読み取る（全ヘッダタイプ共通）
    *
    * 返される 32 ビット整数の構造は次の通り．

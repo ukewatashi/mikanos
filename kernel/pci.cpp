@@ -150,6 +150,16 @@ namespace pci {
     return ReadData();
   }
 
+  uint32_t Read0(uint8_t bus, uint8_t device, uint8_t function) {
+    WriteAddress(MakeAddress(bus, device, function, 0x10));
+    return ReadData();
+  }
+
+  uint16_t ReadSubsys(uint8_t bus, uint8_t device, uint8_t function) {
+    WriteAddress(MakeAddress(bus, device, function, 0x2c));
+    return ReadData() >> 16;
+  }
+
   bool IsSingleFunctionDevice(uint8_t header_type) {
     return (header_type & 0x80u) == 0;
   }

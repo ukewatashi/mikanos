@@ -124,9 +124,11 @@ extern "C" void KernelMain(const FrameBufferConfig& frame_buffer_config) {
     const auto& dev = pci::devices[i];
     auto vendor_id = pci::ReadVendorId(dev.bus, dev.device, dev.function);
     auto class_code = pci::ReadClassCode(dev.bus, dev.device, dev.function);
-    printk("%d.%d.%d: vend %04x, class %08x, head %02x\n",
+    auto aa = pci::ReadSubsys(dev.bus, dev.device, dev.function);
+    auto a0 = pci::Read0(dev.bus, dev.device, dev.function);
+    printk("%d.%d.%d: vend %04x, class %08x, head %02x, subsys %04x, 0: %10x\n",
         dev.bus, dev.device, dev.function,
-        vendor_id, class_code, dev.header_type);
+        vendor_id, class_code, dev.header_type, aa, a0);
   }
   // #@@range_end(show_devices)
 
